@@ -1,0 +1,23 @@
+# GitHub Pages build settings (Jekyll).
+#
+# Pages copies every file in this repo to the published site EXCEPT the paths
+# listed under `exclude`. Everything here is served as-is: index.html has no
+# YAML front matter, so Jekyll treats it as a static file and does not touch it.
+#
+# DO NOT add a .nojekyll file to this repo. That switches the Jekyll build off
+# entirely, which makes this file inert — and `source/` would then be published
+# and downloadable at a public URL.
+#
+# If you ever do need .nojekyll, stop using deploy-from-branch and switch to an
+# Actions workflow that copies only index.html and logo.png into the artifact.
+
+exclude:
+  # NRDC's internal compensation data and the bargaining committee's notes.
+  # These must never be reachable from a URL.
+  - source/
+
+  # Repo furniture that has no business on the public site.
+  - README.md
+  - LICENSE
+  - .gitignore
+  - .claude/
