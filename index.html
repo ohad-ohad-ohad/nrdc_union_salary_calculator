@@ -6,45 +6,35 @@
 <title>What the wage proposal means for you — NRDC Union</title>
 <meta name="description" content="See what NRDC's union wage proposal would mean for your paycheck over the life of the contract.">
 <style>
+  /* ================================================================
+     Palette. Brand values are marked (brand); everything else is a
+     step derived from them to clear contrast at the size it's used.
+     ================================================================ */
   :root {
     color-scheme: light;
-    --page:        #f7f7f4;
-    --surface:     #fcfcfb;
-    --surface-2:   #f1f1ec;
-    --ink:         #0b0b0b;
-    --ink-2:       #52514e;
-    --ink-muted:   #6f6d66;
-    --line:        #e1e0d9;
-    --baseline:    #c3c2b7;
-    --brand:       #0b5e3b;
-    --brand-deep:  #073d27;
-    --brand-soft:  #e8f2ec;
-    --gain:        #0f7a3d;   /* series: increase under the proposal */
-    --held:        #8f8d84;   /* de-emphasis gray: pay today (context) */
-    --focus:       #0f7a3d;
+    --page:        #FFFAE6;   /* (brand) page beige                        */
+    --surface:     #FFFDF4;   /* derived: cards lift off the page          */
+    --surface-2:   #F6EED7;   /* derived: input wells, quiet fills         */
+    --header:      #EBDFC8;   /* derived: banner band, lighter than brand  */
+
+    --ink:         #0B0B0B;   /* (brand) headers                           */
+    --ink-2:       #595B53;   /* (brand) body copy on light backgrounds    */
+    --ink-muted:   #6B6D63;   /* derived: 5.2:1, small print               */
+
+    --accent-1:      #E3493B; /* (brand) primary — large marks & figures   */
+    --accent-1-deep: #C33A2D; /* derived: same red at small-text contrast  */
+    --accent-3:      #717C4A; /* (brand) secondary — controls & focus      */
+    --accent-3-text: #656F42; /* derived: olive at text contrast           */
+    --accent-3-soft: #EBEEDC; /* derived: olive tint, selected chips       */
+
+    --line:        #E4D8BE;
+    --baseline:    #CFB9A0;
+    --gain:        var(--accent-1);  /* series: increase under the proposal */
+    --held:        #8F8A7C;          /* de-emphasis warm gray: pay today    */
+    --focus:       var(--accent-3);
     --radius:      14px;
-    --shadow:      0 1px 2px rgba(11,11,11,.05), 0 8px 24px rgba(11,11,11,.06);
+    --shadow:      0 1px 2px rgba(89,91,83,.07), 0 8px 24px rgba(89,91,83,.10);
     --font: system-ui, -apple-system, "Segoe UI", sans-serif;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      color-scheme: dark;
-      --page:       #0d0f0e;
-      --surface:    #15181a;
-      --surface-2:  #1e2224;
-      --ink:        #ffffff;
-      --ink-2:      #c3c2b7;
-      --ink-muted:  #94938c;
-      --line:       #2c2f2e;
-      --baseline:   #383c3a;
-      --brand:      #5fc78e;
-      --brand-deep: #0b1f16;
-      --brand-soft: #16261e;
-      --gain:       #2fa860;
-      --held:       #6f6d66;
-      --focus:      #5fc78e;
-      --shadow:     0 1px 2px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.35);
-    }
   }
 
   * { box-sizing: border-box; }
@@ -64,35 +54,34 @@
 
   /* ---------- Masthead ---------- */
   .masthead {
-    background: var(--brand-deep);
-    color: #fff;
+    background: var(--header);
+    color: var(--ink);
     padding: 34px 0 40px;
-    border-bottom: 4px solid var(--gain);
+    border-bottom: 4px solid var(--accent-1);
   }
-  @media (prefers-color-scheme: dark) { .masthead { background: #0a1712; } }
   .eyebrow {
     display: inline-flex; align-items: center; gap: 8px;
     font-size: .78rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-    color: #a8dcbf; margin-bottom: 14px;
+    color: var(--ink-2); margin-bottom: 14px;
   }
   .eyebrow::before {
     content: ""; width: 9px; height: 9px; border-radius: 50%;
-    background: #5fc78e;
+    background: var(--accent-1-deep);
   }
-  .masthead h1 { font-size: clamp(1.9rem, 4.6vw, 3rem); color: #fff; max-width: 20ch; }
+  .masthead h1 { font-size: clamp(1.9rem, 4.6vw, 3rem); color: var(--ink); max-width: 20ch; }
   .masthead p {
     margin: 14px 0 0; max-width: 62ch; font-size: clamp(1rem, 1.6vw, 1.12rem);
-    color: #d3e7dc;
+    color: var(--ink-2);
   }
 
   /* ---------- Layout ---------- */
-  main { padding: 30px 0 12px; }
   .grid {
     display: grid; gap: 22px;
     grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
     align-items: start;
   }
-  @media (max-width: 880px) { .grid { grid-template-columns: 1fr; } }
+  @media (max-width: 880px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+  .grid > * { min-width: 0; }   /* let tracks shrink below content min-width */
 
   .card {
     background: var(--surface);
@@ -102,6 +91,10 @@
     padding: 22px;
   }
   @media (min-width: 881px) { .col-inputs { position: sticky; top: 18px; } }
+  @media (max-width: 380px) {
+    .wrap { padding: 0 14px; }
+    .card, .hero { padding: 18px 16px; }
+  }
 
   .card h2 {
     font-size: 1.02rem; text-transform: uppercase; letter-spacing: .08em;
@@ -126,9 +119,9 @@
     border: 1px solid var(--line); border-radius: 9px;
     transition: background .12s, color .12s, border-color .12s;
   }
-  .levels button:hover { border-color: var(--gain); color: var(--ink); }
+  .levels button:hover { border-color: var(--accent-1); color: var(--ink); }
   .levels button[aria-pressed="true"] {
-    background: var(--gain); border-color: var(--gain); color: #fff;
+    background: var(--accent-1-deep); border-color: var(--accent-1-deep); color: #fff;
   }
 
   .money { position: relative; }
@@ -147,11 +140,11 @@
   }
 
   .rangerow { display: flex; align-items: center; gap: 14px; }
-  .rangerow input[type="range"] { flex: 1; accent-color: var(--gain); min-width: 0; }
+  .rangerow input[type="range"] { flex: 1; accent-color: var(--accent-3); min-width: 0; }
   .rangeval {
     min-width: 62px; text-align: center; font-variant-numeric: tabular-nums;
     font-weight: 700; font-size: 1.05rem;
-    background: var(--brand-soft); color: var(--brand); border-radius: 8px; padding: 6px 8px;
+    background: var(--surface-2); color: var(--accent-3-text); border-radius: 8px; padding: 6px 8px;
   }
 
   fieldset { border: 0; padding: 0; margin: 0; }
@@ -163,40 +156,38 @@
     background: var(--surface-2); font-size: .88rem; line-height: 1.35;
     transition: border-color .12s, background .12s;
   }
-  .chip:hover { border-color: var(--gain); }
-  .chip input { accent-color: var(--gain); margin: 2px 0 0; width: 16px; height: 16px; flex: none; }
-  .chip:has(input:checked) { border-color: var(--gain); background: var(--brand-soft); }
+  .chip:hover { border-color: var(--accent-3); }
+  .chip input { accent-color: var(--accent-3); margin: 2px 0 0; width: 16px; height: 16px; flex: none; }
+  .chip:has(input:checked) { border-color: var(--accent-3); background: var(--accent-3-soft); }
   .chip b { font-weight: 650; }
   .chip .amt { color: var(--ink-muted); font-variant-numeric: tabular-nums; }
 
   /* ---------- Results ---------- */
   .hero {
-    background: linear-gradient(160deg, var(--brand-deep), #0d4b31 70%);
-    color: #fff; border-radius: var(--radius); padding: 26px 26px 24px;
-    border: 1px solid transparent; box-shadow: var(--shadow);
-  }
-  @media (prefers-color-scheme: dark) {
-    .hero { background: linear-gradient(160deg, #0a1712, #10281d 70%); border-color: #1f3a2c; }
+    background: var(--surface);
+    color: var(--ink); border-radius: var(--radius); padding: 26px 26px 24px;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
   }
   .hero .kicker {
     font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-    color: #a8dcbf; margin: 0 0 6px;
+    color: var(--accent-1-deep); margin: 0 0 6px;
   }
   .hero .figure {
     font-size: clamp(2.6rem, 7.5vw, 4.2rem); font-weight: 800; letter-spacing: -0.035em;
-    line-height: 1; margin: 0;
+    line-height: 1; margin: 0; color: var(--accent-1);
   }
   .hero .figure small { font-size: .4em; font-weight: 700; letter-spacing: -0.01em; opacity: .85; margin-left: 6px; }
-  .hero .caption { margin: 12px 0 0; color: #d3e7dc; font-size: 1rem; max-width: 52ch; }
-  .hero .caption strong { color: #fff; }
+  .hero .caption { margin: 12px 0 0; color: var(--ink-2); font-size: 1rem; max-width: 52ch; }
+  .hero .caption strong { color: var(--ink); }
 
   .heroline {
     display: flex; flex-wrap: wrap; gap: 10px 26px; margin-top: 20px;
-    padding-top: 18px; border-top: 1px solid rgba(255,255,255,.16);
+    padding-top: 18px; border-top: 1px solid var(--line);
   }
   .heroline div { min-width: 120px; }
-  .heroline .k { font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; color: #a8dcbf; }
-  .heroline .v { font-size: 1.28rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .heroline .k { font-size: .74rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-muted); }
+  .heroline .v { font-size: 1.28rem; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--ink); }
 
   .chartcard { margin-top: 22px; }
   .chart-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; }
@@ -224,19 +215,29 @@
     display: flex; align-items: center; gap: 8px;
   }
   details.more > summary::-webkit-details-marker { display: none; }
+  /* the +/- is drawn, not typed: background-position centres it exactly,
+     where a glyph would sit low by a couple of px on its own metrics */
   details.more > summary::before {
-    content: "+"; display: inline-flex; align-items: center; justify-content: center;
-    width: 20px; height: 20px; border-radius: 50%; background: var(--surface-2);
-    border: 1px solid var(--line); font-weight: 700; flex: none;
+    content: ""; display: inline-block; flex: none;
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 1px solid var(--line);
+    background:
+      linear-gradient(var(--ink-2) 0 0) center / 8px 2px no-repeat,
+      linear-gradient(var(--ink-2) 0 0) center / 2px 8px no-repeat,
+      var(--surface-2);
   }
-  details.more[open] > summary::before { content: "–"; }
+  details.more[open] > summary::before {
+    background:
+      linear-gradient(var(--ink-2) 0 0) center / 8px 2px no-repeat,
+      var(--surface-2);
+  }
 
-  table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: .9rem; }
+  .tablewrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  table { width: 100%; min-width: 360px; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: .9rem; }
   th, td { text-align: right; padding: 9px 8px; border-bottom: 1px solid var(--line); }
   th:first-child, td:first-child { text-align: left; }
   thead th { font-size: .76rem; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-muted); font-weight: 700; }
-  td.gain { color: var(--gain); font-weight: 700; }
-  @media (prefers-color-scheme: dark) { td.gain { color: #5fc78e; } }
+  td.gain { color: var(--accent-1-deep); font-weight: 700; }
 
   .steps { margin: 0; padding-left: 20px; font-size: .9rem; color: var(--ink-2); }
   .steps li { margin: 7px 0; }
@@ -249,26 +250,20 @@
   .why { margin-top: 34px; }
   .why-grid { display: grid; gap: 16px; grid-template-columns: repeat(3, 1fr); margin-top: 16px; }
   @media (max-width: 760px) { .why-grid { grid-template-columns: 1fr; } }
-  .why-grid .card h3 { font-size: 1rem; margin-bottom: 6px; }
+  .why-grid .card h3 { font-size: 1rem; margin-bottom: 6px; color: var(--accent-3-text); }
   .why-grid .card p { margin: 0; font-size: .9rem; color: var(--ink-2); }
 
   .cta {
-    margin: 34px 0 0; background: var(--gain); color: #fff; border-radius: var(--radius);
+    margin: 34px 0 88px; background: var(--accent-1-deep); color: #fff; border-radius: var(--radius);
     padding: 28px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px;
   }
   .cta h2 { font-size: 1.5rem; color: #fff; }
-  .cta p { margin: 6px 0 0; color: #dff0e6; max-width: 48ch; font-size: .95rem; }
+  .cta p { margin: 6px 0 0; color: #FFEFEC; max-width: 48ch; font-size: .95rem; }
   .cta a.btn {
-    background: #fff; color: var(--brand-deep); text-decoration: none; font-weight: 700;
+    background: var(--page); color: var(--accent-1-deep); text-decoration: none; font-weight: 700;
     padding: 13px 22px; border-radius: 10px; white-space: nowrap;
   }
-  .cta a.btn:hover { background: #eafaf0; }
-
-  footer {
-    margin-top: 40px; padding: 26px 0 44px; border-top: 1px solid var(--line);
-    font-size: .82rem; color: var(--ink-muted);
-  }
-  footer p { margin: 0 0 8px; max-width: 78ch; }
+  .cta a.btn:hover { background: #fff; }
 
   .visually-hidden {
     position: absolute; width: 1px; height: 1px; overflow: hidden;
@@ -323,7 +318,7 @@
         </label>
         <div class="money">
           <span class="cur">$</span>
-          <input type="text" id="salary" inputmode="numeric" autocomplete="off" placeholder="e.g. 92,000">
+          <input type="text" id="salary" inputmode="numeric" autocomplete="off" placeholder="e.g. 72,000">
         </div>
       </div>
 
@@ -363,10 +358,7 @@
           <span class="note" id="chart-note"></span>
         </div>
 
-        <div class="legend" aria-hidden="true">
-          <span><i class="swatch" style="background:var(--held)"></i> Your pay today</span>
-          <span><i class="swatch" style="background:var(--gain)"></i> Increase under our proposal</span>
-        </div>
+        <div class="legend" id="legend" aria-hidden="true"></div>
 
         <div class="chartbox">
           <svg class="chart" id="chart" viewBox="0 0 720 330" role="img" aria-labelledby="chart-h chart-desc"></svg>
@@ -376,12 +368,14 @@
 
         <details class="more" id="tbl-details">
           <summary>Show the numbers</summary>
+          <div class="tablewrap">
           <table>
             <thead>
               <tr><th scope="col">Year</th><th scope="col">Your pay today</th><th scope="col">Under our proposal</th><th scope="col">Increase</th><th scope="col">%</th></tr>
             </thead>
             <tbody id="tbody"></tbody>
           </table>
+          </div>
         </details>
 
         <details class="more">
@@ -426,11 +420,6 @@
     <a class="btn" href="#">RSVP &amp; join us &rarr;</a>
   </section>
 
-  <footer>
-    <p><strong>How to read this.</strong> These figures come from the union's wage proposal as written, applied to the numbers you entered. They are an estimate to help you understand the proposal — not a promise, an offer, or a guarantee of what you'll be paid.</p>
-    <p>Tenure is assumed to grow by one year in each year of the contract. Step promotions are only included if you check that box. The 5% floor is measured against the current salary you entered.</p>
-    <p>Questions, or think a number looks wrong? Talk to a member of the bargaining committee.</p>
-  </footer>
 </main>
 
 <script>
@@ -461,7 +450,7 @@
   var TRANS      = 8000;
 
   /* ---------- State ---------- */
-  var s = { level: "B4", tenure: 5, salary: 0, edu: false, lit: false, cso: false, trn: false, step: false };
+  var s = { level: "B3", tenure: 3, salary: 0, edu: false, lit: false, cso: false, trn: false, step: false };
 
   /* ---------- Math ---------- */
   function basePay(level, year) {
@@ -523,10 +512,10 @@
         tile("In " + last.year, usd(last.total)) +
         tile("Total added over 3 years", "+" + usd(r.reduce(function (a, x) { return a + x.gain; }, 0)));
     } else {
-      kick.textContent = "Under our proposal, a " + s.level + " with " + s.tenure + " year" + (s.tenure === 1 ? "" : "s") + " here";
+      kick.textContent = "Under our proposal, a " + s.level + " with " + s.tenure + " year" + (s.tenure === 1 ? "" : "s") + " tenure earns no less than";
       fig.innerHTML = usd(first.total) + "<small>/yr</small>";
       cap.innerHTML = "That's the " + first.year + " salary the proposal sets for your situation, rising to <strong>" + usd(last.total) + "</strong> by " + last.year + ". " +
-        "<strong>Add your current salary</strong> on the left to see your own raise.";
+        "<strong>Add your current salary</strong> in Your Details to see your own raise.";
       line.innerHTML =
         tile(YEARS[0], usd(r[0].total)) +
         tile(YEARS[1], usd(r[1].total)) +
@@ -637,7 +626,7 @@
     li.push("Base pay for a <b>" + s.level + "</b> in " + d.year + ": <b>" + usd(basePay(s.level, d.year)) + "</b>.");
     li.push(d.steps
       ? "Step promotions (" + d.steps + " &times; 1%): <b>+" + usd(basePay(s.level, d.year) * STEP_RATE * d.steps) + "</b>."
-      : "Step promotions: none counted — check the box on the left to include them.");
+      : "Step promotions: none applied yet.");
     li.push("Tenure credit of <b>" + t + " year" + (t === 1 ? "" : "s") + "</b>" +
       (s.edu ? " (" + d.tenure + " here, plus 4 for your degree or prior experience)" : "") +
       ": " + (L.r1 * 100).toFixed(2).replace(/0$/, "") + "% compounded for the first " + t1 + " year" + (t1 === 1 ? "" : "s") +
@@ -660,6 +649,11 @@
     renderChart(r);
     renderTable(r);
     renderHow(r);
+    // the bars are only split into two series once there is a salary to split them by
+    document.getElementById("legend").innerHTML = s.salary > 0
+      ? '<span><i class="swatch" style="background:var(--held)"></i> Your pay today</span>' +
+        '<span><i class="swatch" style="background:var(--gain)"></i> Increase under our proposal</span>'
+      : '<span><i class="swatch" style="background:var(--gain)"></i> Under our proposal</span>';
     document.getElementById("chart-note").textContent =
       r.some(function (d) { return d.floored; }) ? "5% annual floor applied" : "";
   }
