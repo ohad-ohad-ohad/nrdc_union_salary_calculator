@@ -68,6 +68,22 @@
     content: ""; width: 9px; height: 9px; border-radius: 50%;
     background: var(--accent-1-deep);
   }
+  /* Phone: the shield stacks above the headline. It sits inside ~18.7% transparent
+     canvas padding, so the negative margins pull that dead space out and line its
+     left edge up with the headline. */
+  .masthead .logo {
+    display: block; height: 84px; width: auto;
+    margin: -14px 0 2px -16px;
+  }
+  /* Tablet and up: headline and blurb on the left, shield opposite them. */
+  @media (min-width: 701px) {
+    .masthead .wrap { display: flex; align-items: center; gap: 32px; }
+    .masthead .mast-text { flex: 1 1 auto; min-width: 0; }
+    .masthead .logo {
+      order: 2; flex: none; margin: 0;
+      height: clamp(112px, 13vw, 168px);
+    }
+  }
   .masthead h1 { font-size: clamp(1.9rem, 4.6vw, 3rem); color: var(--ink); max-width: 20ch; }
   .masthead p {
     margin: 14px 0 0; max-width: 62ch; font-size: clamp(1rem, 1.6vw, 1.12rem);
@@ -285,7 +301,6 @@
   @media print {
     .masthead { background: #fff; color: #000; }
     .cta, details.more > summary { display: none; }
-    details.more { open: true; }
   }
 </style>
 </head>
@@ -293,8 +308,11 @@
 
 <header class="masthead">
   <div class="wrap">
+    <img class="logo" src="logo.png" alt="NRDC Union" width="540" height="540">
+    <div class="mast-text">
     <h1>See what our wage proposal means for your paycheck.</h1>
-    <p>Our proposal raises the base pay for every job level, then rewards the things NRDC has never paid for consistently: your tenure, your recognition, and the specialized work many of us do. Put in three numbers below and see your own bottom line.</p>
+    <p>Our proposal raises the base pay for every job level, then rewards the things NRDC has never paid for consistently: your tenure, your recognition, and the specialized work many of us do. Fill in a few details below and see your own bottom line.</p>
+    </div>
   </div>
 </header>
 
@@ -591,7 +609,19 @@
   function tile(k, v) { return '<div><div class="k">' + k + '</div><div class="v">' + v + "</div></div>"; }
 
   /* ---------- Render: chart ---------- */
-  var W = 720, H = 348, PAD_T = 54, PAD_B = 60, PAD_X = 26;
+  /* The SVG scales to its container, so a fixed 720-unit viewBox shrinks the
+     type to ~6px on a phone. Pick a narrower, taller viewBox when the card is
+     narrow: same content, far larger relative to the box. */
+  var W, H, PAD_T, PAD_B, PAD_X, F_TOTAL, F_GAIN, F_CAP, F_YEAR;
+  function sizeChart(svg) {
+    var box = svg.parentNode;
+    var narrow = (box.clientWidth || 720) < 560;
+    W = narrow ? 400 : 720;   H = narrow ? 430 : 348;
+    PAD_T = narrow ? 50 : 54; PAD_B = narrow ? 56 : 60; PAD_X = narrow ? 12 : 26;
+    F_TOTAL = narrow ? 15 : 16;   F_GAIN = narrow ? 14 : 15;
+    F_CAP   = narrow ? 12.5 : 13.5; F_YEAR = narrow ? 11 : 12;
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+  }
 
   function roundedTop(x, y, w, h, r) {
     r = Math.min(r, h, w / 2);
@@ -605,6 +635,7 @@
 
   function renderChart(r) {
     var svg = document.getElementById("chart");
+    sizeChart(svg);
     var max = Math.max.apply(null, r.map(function (d) { return d.total; }));
     var top = max * 1.14;   // headroom for a stacked pair of labels above the tallest bar
     var plotH = H - PAD_T - PAD_B;
@@ -634,11 +665,13 @@
         g += '<path d="' + roundedTop(x, yTotal, bw, yHeld - yTotal, 4) + '" fill="var(--gain)"/>';
         // gain label, inside the green segment when it fits, above the column when it doesn't
         var gainH = yHeld - yTotal;
-        if (gainH > 26) {
-          g += '<text x="' + cx + '" y="' + (yTotal + gainH / 2 + 5) + '" text-anchor="middle" font-size="15" font-weight="700" fill="#fff">+' + usd(d.gain) + "</text>";
+        // only letter the gain inside the slice when it fits both ways
+        var gainW = ("+" + usd(d.gain)).length * F_GAIN * 0.58;
+        if (gainH > 26 && gainW < bw - 8) {
+          g += '<text x="' + cx + '" y="' + (yTotal + gainH / 2 + 5) + '" text-anchor="middle" font-size="' + F_GAIN + '" font-weight="700" fill="#fff">+' + usd(d.gain) + "</text>";
         } else {
           // the gain slice is too thin to letter — put it just above the bar and lift the total clear
-          g += '<text x="' + cx + '" y="' + (yTotal - 11) + '" text-anchor="middle" font-size="15" font-weight="700" fill="var(--gain)">+' + usd(d.gain) + "</text>";
+          g += '<text x="' + cx + '" y="' + (yTotal - 11) + '" text-anchor="middle" font-size="' + F_GAIN + '" font-weight="700" fill="var(--gain)">+' + usd(d.gain) + "</text>";
           yTotalLabel = yTotal - 32;
         }
       } else {
@@ -646,11 +679,11 @@
       }
 
       // total above the column
-      g += '<text x="' + cx + '" y="' + yTotalLabel + '" text-anchor="middle" font-size="16" font-weight="700" fill="var(--ink)">' + usd(d.total) + "</text>";
+      g += '<text x="' + cx + '" y="' + yTotalLabel + '" text-anchor="middle" font-size="' + F_TOTAL + '" font-weight="700" fill="var(--ink)">' + usd(d.total) + "</text>";
       // caption: what the bar is, then the year it belongs to
-      g += '<text x="' + cx + '" y="' + (yBase + 23) + '" text-anchor="middle" font-size="13.5" font-weight="650" fill="' +
+      g += '<text x="' + cx + '" y="' + (yBase + 23) + '" text-anchor="middle" font-size="' + F_CAP + '" font-weight="650" fill="' +
            (d.kind === "proposal" ? "var(--accent-1-deep)" : "var(--ink-2)") + '">' + d.label + "</text>";
-      g += '<text x="' + cx + '" y="' + (yBase + 41) + '" text-anchor="middle" font-size="12" fill="var(--ink-muted)">' + d.year + "</text>";
+      g += '<text x="' + cx + '" y="' + (yBase + 41) + '" text-anchor="middle" font-size="' + F_YEAR + '" fill="var(--ink-muted)">' + d.year + "</text>";
       // hover target
       g += '<rect class="hit" data-i="' + i + '" x="' + (cx - slot / 2) + '" y="' + PAD_T + '" width="' + slot + '" height="' + plotH +
            '" fill="transparent" style="cursor:default"/>';
@@ -831,6 +864,12 @@
   });
 
   /* Seed every control from `s` so the defaults live in exactly one place. */
+  var rAF;
+  window.addEventListener("resize", function () {
+    cancelAnimationFrame(rAF);
+    rAF = requestAnimationFrame(function () { renderChart(rows()); });
+  });
+
   showTenure();
   deptEl.value = s.dept;
   if (s.salary > 0) salaryEl.value = s.salary.toLocaleString("en-US");
