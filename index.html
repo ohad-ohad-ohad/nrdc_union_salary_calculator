@@ -575,7 +575,7 @@
                  total: rng[1], held: 0, gain: 0, floored: false });
     }
     if (you && !inBand) out.push(you);
-    out.push({ kind: "proposal", label: "Our proposal", year: PROP_YEAR,
+    out.push({ kind: "proposal", label: "Our proposal (minimum)", year: PROP_YEAR,
                tenure: s.tenure, steps: steps,
                raw: raw, floor: floor, floored: floor > raw, total: total,
                held: s.salary > 0 ? s.salary : 0,
