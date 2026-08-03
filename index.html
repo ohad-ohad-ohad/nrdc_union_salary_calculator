@@ -307,8 +307,8 @@
           <span class="sub">As of the first year of the contract.</span>
         </label>
         <div class="rangerow">
-          <input type="range" id="tenure" min="0" max="30" step="1" value="5" aria-describedby="tenure-val">
-          <output class="rangeval" id="tenure-val" for="tenure">5</output>
+          <input type="range" id="tenure" min="0" max="30" step="1" aria-describedby="tenure-val">
+          <output class="rangeval" id="tenure-val" for="tenure"></output>
         </div>
       </div>
 
@@ -675,9 +675,13 @@
 
   var tenureEl = document.getElementById("tenure");
   var tenureVal = document.getElementById("tenure-val");
+  function showTenure() {
+    tenureEl.value = s.tenure;
+    tenureVal.textContent = s.tenure === 30 ? "30+" : s.tenure;
+  }
   tenureEl.addEventListener("input", function () {
     s.tenure = +tenureEl.value;
-    tenureVal.textContent = s.tenure === 30 ? "30+" : s.tenure;
+    showTenure();
     render();
   });
 
@@ -690,12 +694,17 @@
   });
 
   [["edu", "edu"], ["lit", "lit"], ["cso", "cso"], ["trn", "trn"], ["stepann", "step"]].forEach(function (p) {
-    document.getElementById(p[0]).addEventListener("change", function (e) {
+    var box = document.getElementById(p[0]);
+    box.checked = s[p[1]];
+    box.addEventListener("change", function (e) {
       s[p[1]] = e.target.checked;
       render();
     });
   });
 
+  /* Seed every control from `s` so the defaults live in exactly one place. */
+  showTenure();
+  if (s.salary > 0) salaryEl.value = s.salary.toLocaleString("en-US");
   render();
 })();
 </script>
